@@ -77,7 +77,7 @@ export default class MainController extends cc.Component {
   // 是否正在跳跃:
   jumpStatus: boolean = false;
   //跳跃动画
-  JumpAnimate: any = null;
+  JumpAnimate: cc.Tween = null;
   //跳跃高度
   jumpHeight: number = 150;
   //云移动速度
@@ -225,7 +225,6 @@ export default class MainController extends cc.Component {
       let tempNode = cc.instantiate(tempArray[Math.floor(Math.random() * 6)]);
       tempNode.parent = e == 1 ? this.ground1 : this.ground2;
       tempNode.setPosition(
-        //-(Math.floor(Math.random() * (420 - 350)) + 350) * (i + 1),
         -(
           (2400 / randomNums) * (i + 1) +
           Math.random() * 100 * (Math.random() >= 0.5 ? -1 : 1)
