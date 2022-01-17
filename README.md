@@ -41,38 +41,39 @@ Assets文件夹为所有素材文件夹，其内有Animate文件夹（存放动�
 ~~~~tsx
 onLoad() {
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.throttle, this);
-    this.instiatePrefab(2);
+    this.instiatePrefab(this.grounds[1]);
     this.resetBtn.node.on("click", this.restart, this);
   }
 
   start() {
     let manager = cc.director.getCollisionManager();
     manager.enabled = true;
-    manager.enabledDebugDraw = true;
-    manager.enabledDrawBoundingBox = true;
-    this.moveAction = {
-      animateTrexComponent: this.node.getComponent(cc.Animation)
-        ? this.node.getComponent(cc.Animation)
-        : null,
-      //animateTrexStart
-      trexStart: function () {
-        return this.animateTrexComponent.play("Move");
-      },
-      //animateTrexPause
-      trexJump: function () {
-        return this.animateTrexComponent.play("Jump");
-      },
-      trexDie: function () {
-        return this.animateTrexComponent.play("Dead");
-      },
-      trexPause: function () {
-        return this.animateTrexComponent.pause();
-      },
+
+    class trexMove {
+      animateComponent: cc.Animation;
+
+      constructor(anim: cc.Animation) {
+        this.animateComponent = anim;
+      }
+      trexStart = () => {
+        return this.animateComponent.play("Move");
+      };
+      trexJump = () => {
+        return this.animateComponent.play("Jump");
+      };
+      trexDie = () => {
+        return this.animateComponent.play("Dead");
+      };
+      trexPause = () => {
+        return this.animateComponent.pause();
+      };
       //animateStop
-      trexStop: function () {
-        return this.animateTrexComponent.stop();
-      },
-    };
+      trexStop = () => {
+        return this.animateComponent.stop();
+      };
+    }
+    this.moveAction = new trexMove(this.node.getComponent(cc.Animation));
+  }
 ~~~~
 
 
@@ -94,31 +95,33 @@ onLoad() {
 | node.setPosition() | 当地面节点到达画布左侧就将其setPostion至下一个地面节点右侧，node.setPosition(node.x+=CanvasWidth,node.y) |
 
 ~~~~tsx
-update(dt) {
+update(dt: number) {
     if (this.playStatus && this.lifeStatus) {
-      this.cloudHigher.x -= this.cloudSpeed;
-      this.cloudLower.x -= this.cloudSpeed;
-      this.ground1.x -= this.roadSpeed;
-      this.ground2.x -= this.roadSpeed;
+      this.clouds[0].x -= this.cloudSpeed;
+      this.clouds[1].x -= this.cloudSpeed;
+      this.grounds[0].x -= this.roadSpeed;
+      this.grounds[1].x -= this.roadSpeed;
+      if (this.grounds[0].x <= -480) {
+        this.grounds[0].setPosition(
+          this.grounds[0].x + 4800,
+          this.grounds[0].y
+        );
+        this.instiatePrefab(this.grounds[0]);
+      }
+      if (this.grounds[1].x <= -480) {
+        this.grounds[1].setPosition(
+          this.grounds[1].x + 4800,
+          this.grounds[0].y
+        );
+        this.instiatePrefab(this.grounds[1]);
+      }
+      if (this.clouds[0].x <= -600) {
+        this.clouds[0].setPosition(this.clouds[0].x + 1150, this.clouds[0].y);
+      }
+      if (this.clouds[1].x <= -680) {
+        this.clouds[1].setPosition(this.clouds[1].x + 1200, this.clouds[1].y);
+      }
     }
-    if (this.ground1.x <= -480) {
-      this.ground1.setPosition(this.ground1.x + 4800, this.ground1.y);
-      this.instiatePrefab(1);
-    }
-    if (this.ground2.x <= -480) {
-      this.ground2.setPosition(this.ground2.x + 4800, this.ground1.y);
-      this.instiatePrefab(2);
-    }
-    if (this.cloudHigher.x <= -600) {
-      this.cloudHigher.setPosition(
-        this.cloudHigher.x + 1150,
-        this.cloudHigher.y
-      );
-    }
-    if (this.cloudLower.x <= -680) {
-      this.cloudLower.setPosition(this.cloudLower.x + 1200, this.cloudLower.y);
-    }
-  }
 ~~~~
 
 ### 4.小恐龙跳跃
@@ -129,19 +132,14 @@ update(dt) {
 | cc.tween.stop() | 停止小恐龙跳跃动画 |
 
 ~~~~tsx
-async jumpAction() {
+//跳跃处理。 Done
+  jumpAction() {
     this.moveAction.trexJump();
-    await this.jumpAnimate().then(() => {
-      let tempTimer = setTimeout(() => {
-        this.jumpStatus = false;
-        if (this.lifeStatus) this.moveAction.trexStart();
-        clearTimeout(tempTimer);
-      }, 600);
-    });
+    this.jumpAnimate();
   }
 
   //跳跃动画 Done
-  async jumpAnimate() {
+  jumpAnimate() {
     this.JumpAnimate = cc
       .tween(this.node)
       .by(
@@ -154,6 +152,10 @@ async jumpAction() {
         { position: cc.v3(0, -this.jumpHeight, 0) },
         { easing: "quadIn" }
       )
+      .call(() => {
+        this.valid = true;
+        this.moveAction.trexStart();
+      })
       .start();
   }
 
@@ -175,25 +177,18 @@ async jumpAction() {
 
 ~~~~tsx
 //实例化预制件
-  instiatePrefab(e: number) {
-    if (e == 1) {
-      this.ground1.removeAllChildren();
-    } else if (e == 2) {
-      this.ground2.removeAllChildren();
+    //实例化预制件
+  instiatePrefab(ground: cc.Node) {
+    if (ground.children.length > 0) {
+      ground.removeAllChildren();
     }
-    let tempArray = [
-      this.plant1,
-      this.plant2,
-      this.plant3,
-      this.plant4,
-      this.plant5,
-      this.plant6,
-    ];
-
     let randomNums = Math.floor(Math.random() * (6 - 3)) + 3;
     for (let i = 0; i < randomNums; i++) {
-      let tempNode = cc.instantiate(tempArray[Math.floor(Math.random() * 6)]);
-      tempNode.parent = e == 1 ? this.ground1 : this.ground2;
+      let tempRandom = Math.floor(
+        !this.initial ? Math.random() * 6 : Math.random() * 4
+      );
+      let tempNode = cc.instantiate(this.plantsArray[tempRandom]);
+      tempNode.parent = ground ? ground : this.grounds[0];
       tempNode.setPosition(
         -(
           (2400 / randomNums) * (i + 1) +
@@ -202,6 +197,7 @@ async jumpAction() {
         0
       );
     }
+    this.initial = false;
   }
 
 ~~~~
@@ -219,8 +215,8 @@ async jumpAction() {
 | Animation.setCurrentTime()        | 设置历史分数节点动画的当前播放时间                           |
 
 ~~~~tsx
- //碰撞处理
-  async onCollisionEnter(other: cc.Node, self: cc.Node) {
+//碰撞处理
+  onCollisionEnter(other: cc.Node, self: cc.Node) {
     this.jumpAnimateStop();
     this.moveAction.trexStop();
     this.moveAction.trexDie();
@@ -239,6 +235,10 @@ async jumpAction() {
       tempAnimate2.pause();
       tempAnimate2.setCurrentTime(this.historyRecord);
     }
+    let timer = setTimeout(() => {
+      this.valid = true;
+      clearTimeout(timer);
+    }, 300);
   }
 ~~~~
 
@@ -253,17 +253,19 @@ async jumpAction() {
 | Animation.play()    | 重新播放分数动画                |
 
 ~~~~tsx
-//重新开始游戏事件 
-restart() {
+ //重新开始游戏事件
+  restart() {
+    this.valid = true;
     this.playStatus = true;
     this.lifeStatus = true;
-    this.ground1.removeAllChildren();
-    this.ground2.removeAllChildren();
+    this.grounds[0].removeAllChildren();
+    this.grounds[1].removeAllChildren();
     let tempAnimate = this.currentNode.getComponent(cc.Animation);
     tempAnimate.play();
     this.resetBtn.node.y = -500;
     this.node.y = -270;
     this.moveAction.trexStart();
+    this.initial = true;
   }
 ~~~~
 
@@ -288,21 +290,17 @@ restart() {
 在玩游戏时，会经常连点空格键，但是频繁的触发键盘事件只会白白消耗性能，最初，我设置了一个jumpStatus，当跳跃时会他会将其设为true，再设个定时器，1秒后jumoStatus再为false，才能再次起跳，但是设置过多的定时器会消耗大量性能，因此转而使用节流函数，从源头上解决这个问题。
 
 ~~~~tsx
- //  节流 Done  
-throttle(event: cc.Event.EventKeyboard) {
+  //  节流 Done
+  throttle(event: cc.Event.EventKeyboard) {
     if (!this.valid) {
       return;
-    } else {
-      this.onKeyDown(event);
     }
     this.valid = false;
-    this.timer = setTimeout(() => {
-      this.valid = true;
-    }, 600);
+    this.onKeyDown(event);
   }
 ~~~~
 
-这样每0.6秒才会触发一次键盘事件，而跳一次的耗时刚好为0.6 ，当Destory（）生命周期触发时会清除定时器。
+然后再jump动画尾部加上回调，设置valid为true，之后才会触发一次键盘事件，当发生碰撞时，代码不会运行到尾部，不会发生回调，则在碰撞检测处理中设置valid为true。
 
 ### 2.分数组件的频繁刷新
 
