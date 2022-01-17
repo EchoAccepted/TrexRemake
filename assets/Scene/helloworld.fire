@@ -3165,36 +3165,42 @@
       "__id__": 65
     },
     "_enabled": true,
-    "plant1": {
-      "__uuid__": "e7077557-f064-4a13-95c1-9ed0450dca9f"
-    },
-    "plant2": {
-      "__uuid__": "b7905fb5-e884-448c-afca-a1458a15fa9f"
-    },
-    "plant3": {
-      "__uuid__": "3bfaec9b-4d9f-4a1d-b2ad-0325989aee18"
-    },
-    "plant4": {
-      "__uuid__": "e81f7485-86a4-43a3-b022-536642c82e57"
-    },
-    "plant5": {
-      "__uuid__": "fc93710c-bce5-49f5-9da4-02ddab8c3cd2"
-    },
-    "plant6": {
-      "__uuid__": "7794d609-f699-4ef1-b15d-e4ee0897c478"
-    },
-    "ground1": {
-      "__id__": 14
-    },
-    "ground2": {
-      "__id__": 16
-    },
-    "cloudHigher": {
-      "__id__": 9
-    },
-    "cloudLower": {
-      "__id__": 11
-    },
+    "plantsArray": [
+      {
+        "__uuid__": "e7077557-f064-4a13-95c1-9ed0450dca9f"
+      },
+      {
+        "__uuid__": "b7905fb5-e884-448c-afca-a1458a15fa9f"
+      },
+      {
+        "__uuid__": "3bfaec9b-4d9f-4a1d-b2ad-0325989aee18"
+      },
+      {
+        "__uuid__": "e81f7485-86a4-43a3-b022-536642c82e57"
+      },
+      {
+        "__uuid__": "fc93710c-bce5-49f5-9da4-02ddab8c3cd2"
+      },
+      {
+        "__uuid__": "7794d609-f699-4ef1-b15d-e4ee0897c478"
+      }
+    ],
+    "grounds": [
+      {
+        "__id__": 14
+      },
+      {
+        "__id__": 16
+      }
+    ],
+    "clouds": [
+      {
+        "__id__": 9
+      },
+      {
+        "__id__": 11
+      }
+    ],
     "currentNode": {
       "__id__": 51
     },
@@ -3213,6 +3219,9 @@
     "resetBtn": {
       "__id__": 31
     },
+    "jumpHeight": 150,
+    "cloudSpeed": 2,
+    "roadSpeed": 5,
     "_id": "44/6FslWxOR4vL1wwHsbBg"
   },
   {
