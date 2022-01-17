@@ -58,7 +58,7 @@ export default class MainController extends cc.Component {
   historyRecord: number = 0;
   //跳跃动画
   JumpAnimate: cc.Tween = null;
-  //声明一个trex移动类，控制其所有移动方法
+  //声明一个trex动作类，控制其所有动作方法
   moveAction: any = null;
   // throttle 参数
   valid: boolean = true;
