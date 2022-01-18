@@ -85,7 +85,6 @@ export default class MainController extends cc.Component {
 
     class trexMove {
       animateComponent: cc.Animation;
-
       constructor(anim: cc.Animation) {
         this.animateComponent = anim;
       }
