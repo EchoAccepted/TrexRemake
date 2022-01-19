@@ -1,50 +1,50 @@
 const { ccclass, property } = cc._decorator;
-import trexMove from "./ActionClass";
+import TrexMove from "./ActionClass";
 import global from "./Global";
 import instiatePrefab from "./InstiatePrefab";
 @ccclass
 export default class MainController extends cc.Component {
-  //仙人掌预制件数组
+  // 仙人掌预制件数组
   @property([cc.Prefab])
   plantsArray: cc.Prefab[] = new Array();
 
-  //地面数组
+  // 地面数组
   @property([cc.Node])
   grounds: cc.Node[] = new Array();
 
-  //云数组
+  // 云数组
   @property([cc.Node])
   clouds: cc.Node[] = new Array();
 
-  //当前分数节点
+  // 当前分数节点
   @property(cc.Node)
   currentNode: cc.Node = null;
 
-  //跳跃声音
+  // 跳跃声音
   @property(cc.AudioClip)
   jumpAudio: cc.AudioClip = null;
 
-  //得分声音
+  // 得分声音
   @property(cc.AudioClip)
   scoreAudio: cc.AudioClip = null;
 
-  //重开按钮
+  // 重开按钮
   @property(cc.Button)
   resetBtn: cc.Button = null;
 
-  //跳跃高度
+  // 跳跃高度
   @property
   jumpHeight: number = 150;
 
-  //云移动速度
+  // 云移动速度
   @property
   cloudSpeed: number = 2;
 
-  //路移动速度
+  // 路移动速度
   @property
   roadSpeed: number = 5;
 
-  //是否允许闪烁
+  // 是否允许闪烁
   blinkVaild: boolean = true;
 
   onLoad() {
@@ -55,9 +55,9 @@ export default class MainController extends cc.Component {
 
   start() {
     global.playStatus = false;
-    let manager = cc.director.getCollisionManager();
+    const manager = cc.director.getCollisionManager();
     manager.enabled = true;
-    global.moveAction = new trexMove(this.node.getComponent(cc.Animation));
+    global.moveAction = new TrexMove(this.node.getComponent(cc.Animation));
   }
 
   //  节流 Done
@@ -69,13 +69,13 @@ export default class MainController extends cc.Component {
     this.onKeyDown(event);
   }
 
-  //监听键盘事件，按空格则进行逻辑处理。 Done
+  // 监听键盘事件，按空格则进行逻辑处理。 Done
   onKeyDown(event: cc.Event.EventKeyboard) {
     if (event.keyCode === cc.macro.KEY.space) {
       if (!global.playStatus && global.lifeStatus) {
         global.playStatus = true;
         global.moveAction.trexStart();
-        let tempAnimate = this.currentNode.getComponent(cc.Animation);
+        const tempAnimate = this.currentNode.getComponent(cc.Animation);
         tempAnimate.play();
         this.jumpAction();
       } else if (global.playStatus && global.lifeStatus) {
@@ -88,14 +88,14 @@ export default class MainController extends cc.Component {
     }
   }
 
-  //跳跃处理。 Done
+  // 跳跃处理。 Done
   jumpAction() {
     global.moveAction.trexJump();
     cc.audioEngine.play(this.jumpAudio, false, 0.5);
     this.jumpAnimate();
   }
 
-  //跳跃动画 Done
+  // 跳跃动画 Done
   jumpAnimate() {
     global.JumpAnimate = cc
       .tween(this.node)
@@ -116,14 +116,14 @@ export default class MainController extends cc.Component {
       .start();
   }
 
-  //重新开始游戏
+  // 重新开始游戏
   restart() {
     global.valid = true;
     global.playStatus = true;
     global.lifeStatus = true;
     this.grounds[0].removeAllChildren();
     this.grounds[1].removeAllChildren();
-    let tempAnimate = this.currentNode.getComponent(cc.Animation);
+    const tempAnimate = this.currentNode.getComponent(cc.Animation);
     tempAnimate.play();
     this.resetBtn.node.y = -500;
     this.node.y = -270;

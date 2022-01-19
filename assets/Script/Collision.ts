@@ -3,28 +3,28 @@ import global from "./Global";
 
 @ccclass
 export default class NewClass extends cc.Component {
-  //当前分数节点
+  // 当前分数节点
   @property(cc.Node)
   currentNode: cc.Node = null;
 
-  //历史分数节点
+  // 历史分数节点
   @property(cc.Node)
   historyNum: cc.Node = null;
 
-  //重开按钮
+  // 重开按钮
   @property(cc.Button)
   resetBtn: cc.Button = null;
 
-  //死亡声音
+  // 死亡声音
   @property(cc.AudioClip)
   hitAudio: cc.AudioClip = null;
 
-  //跳跃动画停止
+  // 跳跃动画停止
   jumpAnimateStop() {
     global.JumpAnimate.stop();
   }
 
-  //碰撞处理
+  // 碰撞处理
   onCollisionEnter() {
     this.jumpAnimateStop();
     cc.audioEngine.play(this.hitAudio, false, 0.5);

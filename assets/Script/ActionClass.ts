@@ -1,4 +1,4 @@
-export default class trexMove{
+export default class TrexMove{
     animateComponent: cc.Animation;
       constructor(anim: cc.Animation) {
         this.animateComponent = anim;
@@ -15,7 +15,7 @@ export default class trexMove{
       trexPause = () => {
         return this.animateComponent.pause();
       };
-      //animateStop
+      // animateStop
       trexStop = () => {
         return this.animateComponent.stop();
       };
