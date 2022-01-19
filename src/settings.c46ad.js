@@ -1,1 +1,0 @@
-window._CCSettings={platform:"web-desktop",groupList:["default","New Group 3"],collisionMatrix:[[true,true],[true,false]],hasResourcesBundle:false,hasStartSceneBundle:false,remoteBundles:[],subpackages:[],launchScene:"db://assets/Scene/helloworld.fire",orientation:"",jsList:[],bundleVers:{internal:"d17e2",main:"8b82e"}};
