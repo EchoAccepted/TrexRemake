@@ -1,0 +1,55 @@
+{
+  "excludeScenes": [],
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "org.cocos2d.helloworld",
+  "startScene": "a7261ed1-984e-46ab-ad94-c6d1fac6c607",
+  "title": "offlineGameTest",
+  "webOrientation": "auto",
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "mainCompressionType": "default",
+  "mainIsRemote": false,
+  "optimizeHotUpdate": false,
+  "md5Cache": true,
+  "nativeMd5Cache": true,
+  "encryptJs": true,
+  "xxteaKey": "e0fc34d5-62db-4f",
+  "zipCompressJs": true,
+  "fb-instant-games": {},
+  "android": {
+    "packageName": "org.cocos2d.demo",
+    "REMOTE_SERVER_ROOT": ""
+  },
+  "ios": {
+    "packageName": "org.cocos2d.demo",
+    "REMOTE_SERVER_ROOT": "",
+    "ios_enable_jit": true
+  },
+  "mac": {
+    "packageName": "org.cocos2d.demo",
+    "REMOTE_SERVER_ROOT": "",
+    "width": 1280,
+    "height": 720
+  },
+  "win32": {
+    "REMOTE_SERVER_ROOT": "",
+    "width": 1280,
+    "height": 720
+  },
+  "android-instant": {
+    "packageName": "org.cocos2d.demo",
+    "REMOTE_SERVER_ROOT": "",
+    "pathPattern": "",
+    "scheme": "https",
+    "host": "",
+    "skipRecord": false,
+    "recordPath": ""
+  },
+  "appBundle": false,
+  "agreements": {}
+}
