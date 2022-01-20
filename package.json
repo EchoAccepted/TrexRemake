@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/ShawnaZhou/offLineGame.github.io#readme",
   "devDependencies": {
+    "@commitlint/travis-cli": "^16.0.3",
     "husky": "^7.0.4"
+  },
+  "husky":{
+    "hooks":{
+      "commit-msg":"commitlint -E HUSKY_GIT_PARAMES"
+    }
   }
 }
