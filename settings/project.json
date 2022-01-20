@@ -14,12 +14,11 @@
     "default",
     "New Group 3"
   ],
-  "start-scene": "current",
   "design-resolution-width": 960,
   "design-resolution-height": 640,
-  "fit-width": false,
+  "fit-width": true,
   "fit-height": true,
-  "use-project-simulator-setting": false,
+  "use-project-simulator-setting": true,
   "simulator-orientation": false,
   "use-customize-simulator": true,
   "simulator-resolution": {

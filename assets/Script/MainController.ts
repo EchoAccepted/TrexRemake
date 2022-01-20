@@ -1,6 +1,6 @@
 const { ccclass, property } = cc._decorator;
 import TrexMove from "./ActionClass";
-import global from "./Global";
+import global, { PlayStatus, LifeStatus } from "./Global";
 import instiatePrefab from "./InstiatePrefab";
 @ccclass
 export default class MainController extends cc.Component {
@@ -54,7 +54,6 @@ export default class MainController extends cc.Component {
   }
 
   start() {
-    global.playStatus = false;
     const manager = cc.director.getCollisionManager();
     manager.enabled = true;
     global.moveAction = new TrexMove(this.node.getComponent(cc.Animation));
@@ -72,17 +71,15 @@ export default class MainController extends cc.Component {
   // 监听键盘事件，按空格则进行逻辑处理。 Done
   onKeyDown(event: cc.Event.EventKeyboard) {
     if (event.keyCode === cc.macro.KEY.space) {
-      if (!global.playStatus && global.lifeStatus) {
-        global.playStatus = true;
+      if (global.playStatus === 1 && global.lifeStatus === 0) {
+        global.playStatus = PlayStatus.playing;
         global.moveAction.trexStart();
         const tempAnimate = this.currentNode.getComponent(cc.Animation);
         tempAnimate.play();
         this.jumpAction();
-      } else if (global.playStatus && global.lifeStatus) {
+      } else if (global.playStatus === 0 && global.lifeStatus === 0) {
         this.jumpAction();
-      } else if (global.playStatus && !global.lifeStatus) {
-        return;
-      } else if (!global.playStatus && !global.lifeStatus) {
+      } else if (global.playStatus === 1 && global.lifeStatus === 1) {
         this.restart();
       }
     }
@@ -119,8 +116,8 @@ export default class MainController extends cc.Component {
   // 重新开始游戏
   restart() {
     global.valid = true;
-    global.playStatus = true;
-    global.lifeStatus = true;
+    global.playStatus = PlayStatus.playing;
+    global.lifeStatus = LifeStatus.alive;
     this.grounds[0].removeAllChildren();
     this.grounds[1].removeAllChildren();
     const tempAnimate = this.currentNode.getComponent(cc.Animation);
@@ -131,32 +128,38 @@ export default class MainController extends cc.Component {
     global.initial = true;
   }
 
+  backgroundMove() {
+    this.clouds[0].x -= this.cloudSpeed;
+    this.clouds[1].x -= this.cloudSpeed;
+    this.grounds[0].x -= this.roadSpeed;
+    this.grounds[1].x -= this.roadSpeed;
+  }
+
+  groundsPositionUpdate() {
+    if (this.grounds[0].x <= -480) {
+      this.grounds[0].setPosition(this.grounds[0].x + 4800, this.grounds[0].y);
+      instiatePrefab(this.grounds[0], this.plantsArray);
+    }
+    if (this.grounds[1].x <= -480) {
+      this.grounds[1].setPosition(this.grounds[1].x + 4800, this.grounds[0].y);
+      instiatePrefab(this.grounds[1], this.plantsArray);
+    }
+  }
+
+  cloudsPositionUpdate() {
+    if (this.clouds[0].x <= -600) {
+      this.clouds[0].setPosition(this.clouds[0].x + 1150, this.clouds[0].y);
+    }
+    if (this.clouds[1].x <= -680) {
+      this.clouds[1].setPosition(this.clouds[1].x + 1200, this.clouds[1].y);
+    }
+  }
+
   update(dt: number) {
-    if (global.playStatus && global.lifeStatus) {
-      this.clouds[0].x -= this.cloudSpeed;
-      this.clouds[1].x -= this.cloudSpeed;
-      this.grounds[0].x -= this.roadSpeed;
-      this.grounds[1].x -= this.roadSpeed;
-      if (this.grounds[0].x <= -480) {
-        this.grounds[0].setPosition(
-          this.grounds[0].x + 4800,
-          this.grounds[0].y
-        );
-        instiatePrefab(this.grounds[0], this.plantsArray);
-      }
-      if (this.grounds[1].x <= -480) {
-        this.grounds[1].setPosition(
-          this.grounds[1].x + 4800,
-          this.grounds[0].y
-        );
-        instiatePrefab(this.grounds[1], this.plantsArray);
-      }
-      if (this.clouds[0].x <= -600) {
-        this.clouds[0].setPosition(this.clouds[0].x + 1150, this.clouds[0].y);
-      }
-      if (this.clouds[1].x <= -680) {
-        this.clouds[1].setPosition(this.clouds[1].x + 1200, this.clouds[1].y);
-      }
+    if (global.playStatus === 0 && global.lifeStatus === 0) {
+      this.backgroundMove();
+      this.groundsPositionUpdate();
+      this.cloudsPositionUpdate();
     }
   }
 }
