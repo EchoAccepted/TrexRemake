@@ -3304,6 +3304,9 @@
     "currentNode": {
       "__id__": 53
     },
+    "historyNode": {
+      "__id__": 34
+    },
     "jumpAudio": {
       "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
     },
@@ -3407,12 +3410,6 @@
       "__id__": 67
     },
     "_enabled": true,
-    "currentNode": {
-      "__id__": 53
-    },
-    "historyNum": {
-      "__id__": 34
-    },
     "resetBtn": {
       "__id__": 33
     },
@@ -3434,7 +3431,7 @@
       "width": 960,
       "height": 640
     },
-    "_fitWidth": false,
+    "_fitWidth": true,
     "_fitHeight": true,
     "_id": "e0Jkwfn8JO4KeQvdR1eZA4"
   },
@@ -3448,11 +3445,11 @@
     "_enabled": true,
     "alignMode": 1,
     "_target": null,
-    "_alignFlags": 45,
-    "_left": 0,
-    "_right": 0,
-    "_top": 0,
-    "_bottom": 0,
+    "_alignFlags": 18,
+    "_left": 480,
+    "_right": 480,
+    "_top": 320,
+    "_bottom": 320,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
