@@ -3,50 +3,37 @@
  */
 
 const { ccclass, property } = cc._decorator;
-import global, { GameStatus, PlayerStatus } from "./Global";
+import Global, { GameState } from "./Global";
+import DinoActionControllerClass from "./DinoActionController";
+import ButtonControllerClass from "./ButtonController";
+import ScoreControllerClass from "./ScoreController";
 
 @ccclass
-export default class NewClass extends cc.Component {
-  /** 重开按钮 */
-  @property(cc.Button)
-  resetBtn: cc.Button = null;
-
+export default class CollisionController extends cc.Component {
   /** 碰撞声音 */
   @property(cc.AudioClip)
   hitAudio: cc.AudioClip = null;
 
-  /**  跳跃动画停止 */
-  jumpAnimateStop() {
-    global.dinoActionController.dinoJump().stop();
+  onLoad() {
+    cc.director.getCollisionManager().enabled = true;
   }
 
-  /** 更新全局变量 */
-  updateGlobalState() {
-    global.dinoActionController.dinoDie();
-    global.gameStatus = GameStatus.stopped;
-    global.playerStatus = PlayerStatus.dead;
-    global.canPressSpace = true;
-  }
+  /** 碰撞处理 ：
+   * 恐龙死亡
+   * 碰撞音效
+   * 游戏状态更新
+   * 历史分数更新
+   * 键盘事件可触发
+   * 重置按钮显示
+   */
 
-  /** 当前分数节点动画停止并返回播放时间 */
-  currentAnimateStop() {
-    return global.scoreController.curretnAnimationStop();
-  }
-
-  /** 更新历史分数节点 */
-  historyAnimateUpdate(currentTime: number) {
-    if (currentTime > global.historyRecord) {
-      global.scoreController.historyAnimationUpdate(currentTime);
-    }
-  }
-
-  /** 碰撞处理 */
   onCollisionEnter() {
-    global.JumpAnimate.stop();
     cc.audioEngine.play(this.hitAudio, false, 0.5);
-    this.updateGlobalState();
-    const animatedTime = this.currentAnimateStop();
-    this.historyAnimateUpdate(animatedTime);
-    this.resetBtn.node.y = -100;
+    this.node.getComponent(DinoActionControllerClass).dinoDie();
+    Global.gameState = GameState.stopped;
+    this.node.getComponent(ScoreControllerClass).curretnAnimationStop();
+    this.node.getComponent(ScoreControllerClass).historyAnimationUpdate();
+    this.node.getComponent(ButtonControllerClass).resetBtnShow();
+    Global.canPressSpace = true;
   }
 }

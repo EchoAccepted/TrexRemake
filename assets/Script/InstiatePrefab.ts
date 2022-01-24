@@ -1,7 +1,5 @@
 /** 实例化植物预制件 */
-
-import global from "./Global";
-
+import Global, { GameState } from "./Global";
 export default function instiatePrefab(
   ground: cc.Node,
   plantsArray: cc.Prefab[]
@@ -20,7 +18,9 @@ export default function instiatePrefab(
      * 若不是则生成一个0-6的整数
      */
     const tempRandom = Math.floor(
-      !global.initial ? Math.random() * 6 : Math.random() * 4
+      Global.gameState === GameState.initial
+        ? Math.random() * 6
+        : Math.random() * 4
     );
     const tempNode = cc.instantiate(plantsArray[tempRandom]);
     tempNode.parent = ground;
@@ -36,5 +36,4 @@ export default function instiatePrefab(
       0
     );
   }
-  global.initial = false;
 }

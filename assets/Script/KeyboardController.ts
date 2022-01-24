@@ -1,59 +1,68 @@
 /** 控制键盘事件 */
-import global, { GameStatus, PlayerStatus } from "./Global";
+import Global, { GameState } from "./Global";
+import DinoActionControllerClass from "./DinoActionController";
+import ScoreControllerClass from "./ScoreController";
+import StageController from "./StageController";
+import ButtonController from "./ButtonController";
 
-/** 重置全局变量 */
-function resetGlobalState() {
-  global.canPressSpace = true;
-  global.gameStatus = GameStatus.playing;
-  global.playerStatus = PlayerStatus.alive;
-  global.initial = true;
-}
+const { ccclass, property } = cc._decorator;
 
-/** 重新开始游戏 */
-export function restart(resetButton: cc.Button) {
-  resetGlobalState();
-  global.dinoActionController.dinoReborn();
-  global.stageController.groundsRemoveChildren();
-  global.scoreController.currentAnimationStart();
-  resetButton.node.y = -500;
-}
+@ccclass
+export default class KeyboardController extends cc.Component {
+  public static canPressSpace = true;
 
-export default function KeyboardController(
-  event: cc.Event.EventKeyboard,
-  resetBtn: cc.Button
-) {
-  if (event.keyCode === cc.macro.KEY.space) {
-    /** 游戏未开始，玩家存活 */
-    if (
-      global.gameStatus === GameStatus.stopped &&
-      global.playerStatus === PlayerStatus.alive
-    ) {
-      global.gameStatus = GameStatus.playing;
-      global.scoreController.currentAnimationStart();
-      global.JumpAnimate = global.dinoActionController.dinoJump();
-      global.JumpAnimate.call(() => {
-        global.canPressSpace = true;
-        global.dinoActionController.dinoMove();
-      }).start();
-    } 
-    /** 游戏正在运行且玩家存活 */ 
-    else if (
-      global.gameStatus === GameStatus.playing &&
-      global.playerStatus === PlayerStatus.alive
-    ) {
-      global.JumpAnimate = global.dinoActionController
-        .dinoJump()
-        .call(() => {
-          global.canPressSpace = true;
-        })
-        .start();
-    } 
-    /** 游戏结束玩家死亡 */ 
-    else if (
-      global.gameStatus === GameStatus.stopped &&
-      global.playerStatus === PlayerStatus.dead
-    ) {
-      restart(resetBtn);
+  onLoad() {
+    cc.systemEvent.on(
+      cc.SystemEvent.EventType.KEY_DOWN,
+      this.pressThrottle,
+      this
+    );
+  }
+
+  /** 按键节流 */
+  pressThrottle(event: cc.Event.EventKeyboard) {
+    if (!Global.canPressSpace) {
+      return;
     }
+    Global.canPressSpace = false;
+    this.KeyboardController(event);
+  }
+
+  KeyboardController(event: cc.Event.EventKeyboard) {
+    if (event.keyCode === cc.macro.KEY.space) {
+      /** 游戏未开始 */
+      if (Global.gameState === GameState.initial) {
+        this.node.getComponent(ScoreControllerClass).currentAnimationStart();
+        this.node.getComponent(DinoActionControllerClass).dinoJump();
+        Global.gameState = GameState.playing;
+      } else if (
+        /** 游戏正在运行 */
+        Global.gameState === GameState.playing
+      ) {
+        this.node.getComponent(DinoActionControllerClass).dinoJump();
+      } else if (
+        /** 游戏结束 */
+        Global.gameState === GameState.stopped
+      ) {
+        this.restart();
+      }
+    }
+  }
+
+  /**
+   * 恐龙重生
+   * 当前分数重置
+   * 游戏状态重置
+   * 舞台状态重置
+   * 按钮重置
+   * 键盘事件可使用
+   */
+  restart() {
+    this.node.getComponent(DinoActionControllerClass).dinoReborn();
+    Global.gameState = GameState.playing;
+    this.node.getComponent(ScoreControllerClass).currentAnimationStart();
+    this.node.getComponent(StageController).stageReinit();
+    this.node.getComponent("ButtonController").resetBtnHide();
+    Global.canPressSpace = true;
   }
 }

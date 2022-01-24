@@ -57,7 +57,7 @@
     "_is3DNode": true,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "autoReleaseAssets": false,
+    "autoReleaseAssets": true,
     "_id": "2d2f792f-a40c-49bb-a189-ed176a246e49"
   },
   {
@@ -102,10 +102,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 73
+        "__id__": 77
       },
       {
-        "__id__": 74
+        "__id__": 78
       }
     ],
     "_prefab": null,
@@ -3175,6 +3175,18 @@
       },
       {
         "__id__": 72
+      },
+      {
+        "__id__": 73
+      },
+      {
+        "__id__": 74
+      },
+      {
+        "__id__": 75
+      },
+      {
+        "__id__": 76
       }
     ],
     "_prefab": null,
@@ -3256,70 +3268,6 @@
     "_isTrimmedMode": true,
     "_atlas": null,
     "_id": "22rI+wAhNOGqJdqxJNADfr"
-  },
-  {
-    "__type__": "1ef82iwv1hIQpjR5SBIHTuB",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 67
-    },
-    "_enabled": true,
-    "plantsArray": [
-      {
-        "__uuid__": "e7077557-f064-4a13-95c1-9ed0450dca9f"
-      },
-      {
-        "__uuid__": "b7905fb5-e884-448c-afca-a1458a15fa9f"
-      },
-      {
-        "__uuid__": "3bfaec9b-4d9f-4a1d-b2ad-0325989aee18"
-      },
-      {
-        "__uuid__": "e81f7485-86a4-43a3-b022-536642c82e57"
-      },
-      {
-        "__uuid__": "fc93710c-bce5-49f5-9da4-02ddab8c3cd2"
-      },
-      {
-        "__uuid__": "7794d609-f699-4ef1-b15d-e4ee0897c478"
-      }
-    ],
-    "grounds": [
-      {
-        "__id__": 14
-      },
-      {
-        "__id__": 16
-      }
-    ],
-    "clouds": [
-      {
-        "__id__": 9
-      },
-      {
-        "__id__": 11
-      }
-    ],
-    "currentNode": {
-      "__id__": 53
-    },
-    "historyNode": {
-      "__id__": 34
-    },
-    "jumpAudio": {
-      "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
-    },
-    "scoreAudio": {
-      "__uuid__": "55d110b9-bab6-4d9d-9416-03e46904fa35"
-    },
-    "resetBtn": {
-      "__id__": 33
-    },
-    "jumpHeight": 150,
-    "cloudSpeed": 2,
-    "roadSpeed": 5,
-    "_id": "44/6FslWxOR4vL1wwHsbBg"
   },
   {
     "__type__": "cc.Animation",
@@ -3410,13 +3358,110 @@
       "__id__": 67
     },
     "_enabled": true,
-    "resetBtn": {
-      "__id__": 33
-    },
     "hitAudio": {
       "__uuid__": "6fcbddc5-5df8-4b78-b512-3e6f6f029481"
     },
     "_id": "44q6hz23tEU5gVValReIaS"
+  },
+  {
+    "__type__": "7f6922cfwJPpIt3JNpYtyTU",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 67
+    },
+    "_enabled": true,
+    "jumpAudio": {
+      "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
+    },
+    "_id": "fcKNsyJ95Mrq45wjB4vX8f"
+  },
+  {
+    "__type__": "d4de1WchgxK/bCWTu7IIkkY",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 67
+    },
+    "_enabled": true,
+    "_id": "1255tBuwpBEoh3EC1Fdh86"
+  },
+  {
+    "__type__": "3ee39zTsIVITLElYlOxFX/e",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 67
+    },
+    "_enabled": true,
+    "resetBtn": {
+      "__id__": 33
+    },
+    "_id": "cbbutYKPdDwKBkwEAN2wBb"
+  },
+  {
+    "__type__": "494f1OqLn9NhI2oyfUuEFY/",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 67
+    },
+    "_enabled": true,
+    "cloudSpeed": 2,
+    "roadSpeed": 5,
+    "plantsArray": [
+      {
+        "__uuid__": "e7077557-f064-4a13-95c1-9ed0450dca9f"
+      },
+      {
+        "__uuid__": "b7905fb5-e884-448c-afca-a1458a15fa9f"
+      },
+      {
+        "__uuid__": "3bfaec9b-4d9f-4a1d-b2ad-0325989aee18"
+      },
+      {
+        "__uuid__": "e81f7485-86a4-43a3-b022-536642c82e57"
+      },
+      {
+        "__uuid__": "fc93710c-bce5-49f5-9da4-02ddab8c3cd2"
+      },
+      {
+        "__uuid__": "7794d609-f699-4ef1-b15d-e4ee0897c478"
+      }
+    ],
+    "grounds": [
+      {
+        "__id__": 14
+      },
+      {
+        "__id__": 16
+      }
+    ],
+    "clouds": [
+      {
+        "__id__": 9
+      },
+      {
+        "__id__": 11
+      }
+    ],
+    "_id": "a2fBTO17JBE4zHQGojRzWE"
+  },
+  {
+    "__type__": "2a7fcQ2TDJH5LMT+33sovGW",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 67
+    },
+    "_enabled": true,
+    "currentNode": {
+      "__id__": 53
+    },
+    "historyNode": {
+      "__id__": 34
+    },
+    "_id": "769yVWJClOzImtVE0AEXxB"
   },
   {
     "__type__": "cc.Canvas",
