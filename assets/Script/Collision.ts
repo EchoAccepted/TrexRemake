@@ -29,11 +29,18 @@ export default class CollisionController extends cc.Component {
 
   onCollisionEnter() {
     cc.audioEngine.play(this.hitAudio, false, 0.5);
-    this.node.getComponent(DinoActionControllerClass).dinoDie();
-    Global.gameState = GameState.stopped;
-    this.node.getComponent(ScoreControllerClass).curretnAnimationStop();
-    this.node.getComponent(ScoreControllerClass).historyAnimationUpdate();
-    this.node.getComponent(ButtonControllerClass).resetBtnShow();
-    Global.canPressSpace = true;
+    this.node.getComponent(DinoActionControllerClass).dinoHealthReduce();
+    if (Global.dinoHealth <= 0) {
+      this.node.getComponent(DinoActionControllerClass).dinoDie();
+      Global.gameState = GameState.stopped;
+      this.node.getComponent(ScoreControllerClass).curretnAnimationStop();
+      this.node.getComponent(ScoreControllerClass).historyAnimationUpdate();
+      this.node.getComponent(ButtonControllerClass).resetBtnShow();
+      Global.canPressSpace = true;
+    }
+  }
+
+  onCollisionExit() {
+    this.node.getComponent(DinoActionControllerClass).dinoMove();
   }
 }

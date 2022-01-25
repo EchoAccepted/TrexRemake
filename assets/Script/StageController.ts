@@ -10,6 +10,10 @@ export default class StageController extends cc.Component {
   @property
   cloudSpeed: number = 0;
 
+  /** 加速度 */
+  @property
+  acceleration: number = 0.01;
+
   /** 路移动速度 */
   @property
   roadSpeed: number = 0;
@@ -94,6 +98,7 @@ export default class StageController extends cc.Component {
 
   /** 整体舞台移动控制 */
   stageMove() {
+    this.roadSpeed += this.acceleration;
     this.backgroundMove();
     this.groundsPositionUpdate();
     this.cloudsPositionUpdate();
@@ -101,6 +106,7 @@ export default class StageController extends cc.Component {
 
   /** 舞台重置 */
   stageReinit() {
+    this.roadSpeed = 5;
     this.groundsRemoveChildren();
     if (this.grounds[1].x <= 0) {
       instiatePrefab(this.grounds[1], this.plantsArray);

@@ -1,5 +1,5 @@
 /** 定义一个恐龙动作类，方便对恐龙动作进行统一管理 */
-import global from "./Global";
+import Global from "./Global";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -7,6 +7,10 @@ export default class DinoActionControllerClass extends cc.Component {
   /** 跳跃声音 */
   @property(cc.AudioClip)
   jumpAudio: cc.AudioClip = null;
+
+  /** 生命值节点 */
+  @property(cc.Node)
+  healthNode: cc.Node = null;
 
   /** 跳跃高度 */
   jumpHeight: number = 150;
@@ -19,11 +23,28 @@ export default class DinoActionControllerClass extends cc.Component {
 
   onLoad() {
     this.animateComponent = this.node.getComponent(cc.Animation);
+    cc.director.getPhysicsManager().enabled = true;
+    cc.director.getPhysicsManager().gravity = cc.v2(0, -320);
+  }
+
+  /** 恐龙初始化 */
+  dinoInit() {
+    this.node.y = -270;
+    this.animateComponent.play("Init");
   }
 
   /** 恐龙移动 */
   dinoMove() {
     this.animateComponent.play("Move");
+  }
+
+  /** 恐龙生命值减少 */
+  dinoHealthReduce() {
+    if (this.healthNode.children[0].active) {
+      Global.dinoHealth -= 1;
+      this.healthNode.children[Global.dinoHealth].active = false;
+      this.animateComponent.play("Dead");
+    }
   }
 
   /** 恐龙死亡 */
@@ -51,7 +72,7 @@ export default class DinoActionControllerClass extends cc.Component {
       )
       .call(() => {
         this.animateComponent.play("Move");
-        global.canPressSpace = true;
+        Global.canPressSpace = true;
       })
       .start();
     cc.audioEngine.play(this.jumpAudio, false, 0.5);
@@ -59,6 +80,10 @@ export default class DinoActionControllerClass extends cc.Component {
 
   /** 恐龙重生 */
   dinoReborn() {
+    Global.dinoHealth = 3;
+    this.healthNode.children.forEach((item) => {
+      item.active = true;
+    });
     this.node.y = -270;
     this.animateComponent.play("Move");
   }

@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "clock",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 4,
+  "sample": 1,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "9fed7b7f-e481-4ef9-b7f4-ccab2e37d235"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "eb3e4e1a-730d-4270-9916-e658be4d4cca"
+            }
+          },
+          {
+            "frame": 2,
+            "value": {
+              "__uuid__": "dd25c2cd-3961-4eba-8b80-ca80027e968d"
+            }
+          },
+          {
+            "frame": 3,
+            "value": {
+              "__uuid__": "86f53571-377f-431f-8dc7-f801b17efd86"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

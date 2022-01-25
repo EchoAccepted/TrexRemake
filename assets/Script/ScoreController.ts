@@ -11,6 +11,10 @@ export default class ScoreControllerClass extends cc.Component {
   @property(cc.Node)
   historyNode: cc.Node = null;
 
+  onLoad() {
+    this.historyNode.active = false;
+  }
+
   /** 播放当前分数节点动画 */
   currentAnimationStart() {
     let currentAnimate = this.currentNode.getComponent(cc.Animation);
@@ -24,6 +28,12 @@ export default class ScoreControllerClass extends cc.Component {
     return currentAnimate.getAnimationState("Main").time;
   }
 
+  /** 继续当前动画 */
+  curretnAnimateResume() {
+    let currentAnimate = this.currentNode.getComponent(cc.Animation);
+    currentAnimate.resume();
+  }
+
   /** 更新历史节点 */
   historyAnimationUpdate() {
     let currentTime = this.currentNode
@@ -31,7 +41,7 @@ export default class ScoreControllerClass extends cc.Component {
       .getAnimationState("Main").time;
     if (currentTime > Global.historyRecord) {
       Global.historyRecord = currentTime;
-      this.historyNode.y = 95;
+      this.historyNode.active = true;
       let historyAnimate = this.historyNode.children[1].getComponent(
         cc.Animation
       );
