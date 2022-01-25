@@ -9,8 +9,6 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class KeyboardController extends cc.Component {
-  public static canPressSpace = true;
-
   onLoad() {
     cc.systemEvent.on(
       cc.SystemEvent.EventType.KEY_DOWN,
@@ -62,7 +60,7 @@ export default class KeyboardController extends cc.Component {
     Global.gameState = GameState.playing;
     this.node.getComponent(ScoreControllerClass).currentAnimationStart();
     this.node.getComponent(StageController).stageReinit();
-    this.node.getComponent("ButtonController").resetBtnHide();
+    this.node.getComponent(ButtonController).resetBtnHide();
     Global.canPressSpace = true;
   }
 }

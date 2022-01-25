@@ -20,10 +20,10 @@
   "fit-height": true,
   "use-project-simulator-setting": true,
   "simulator-orientation": false,
-  "use-customize-simulator": true,
+  "use-customize-simulator": false,
   "simulator-resolution": {
-    "width": 960,
-    "height": 640
+    "width": 1125,
+    "height": 2436
   },
   "last-module-event-record-time": 1642130151443,
   "assets-sort-type": "name",

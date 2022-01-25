@@ -26,8 +26,35 @@ export default class StageController extends cc.Component {
   @property([cc.Node])
   clouds: cc.Node[] = new Array();
 
+  /** 对象池 */
+  nodePool: cc.NodePool = null;
+
   onLoad() {
     this.stageInit();
+    this.nodePool = new cc.NodePool();
+    for (let i = 0; i < this.plantsArray.length * 2; i++) {
+      let node = cc.instantiate(
+        this.plantsArray[
+          i >= this.plantsArray.length ? i - this.plantsArray.length : i
+        ]
+      );
+      this.nodePool.put(node);
+    }
+    this.instantiatePlant(this.grounds[1]);
+  }
+
+  onStart() {
+    console.log(this.nodePool.get());
+  }
+
+  instantiatePlant(parentNode: cc.Node) {
+    let tempNode = null;
+    if (this.nodePool.size() > 0) {
+      tempNode = this.nodePool.get();
+    } else {
+      return;
+    }
+    tempNode.parent = parentNode;
   }
 
   /** 初始化舞台 */

@@ -1,5 +1,6 @@
 /** 实例化植物预制件 */
 import Global, { GameState } from "./Global";
+
 export default function instiatePrefab(
   ground: cc.Node,
   plantsArray: cc.Prefab[]
@@ -7,6 +8,7 @@ export default function instiatePrefab(
   if (ground.children.length > 0) {
     ground.removeAllChildren();
   }
+
   /**
    * 生成随机节点数量
    */
