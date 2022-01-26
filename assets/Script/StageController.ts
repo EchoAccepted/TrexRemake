@@ -1,7 +1,7 @@
 /** 舞台节点控制 */
 
 import instiatePrefab from "./InstiatePrefab";
-import Global, { GameState } from "./Global";
+import GameController, { GameState } from "./GameController";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -47,10 +47,6 @@ export default class StageController extends cc.Component {
     this.instantiatePlant(this.grounds[1]);
   }
 
-  onStart() {
-    console.log(this.nodePool.get());
-  }
-
   instantiatePlant(parentNode: cc.Node) {
     let tempNode = null;
     if (this.nodePool.size() > 0) {
@@ -76,11 +72,11 @@ export default class StageController extends cc.Component {
 
   /** 地面位置更新 */
   groundsPositionUpdate() {
-    if (this.grounds[0].x <= -480) {
+    if (this.grounds[0].x <= -667) {
       this.grounds[0].setPosition(this.grounds[0].x + 4800, this.grounds[0].y);
       instiatePrefab(this.grounds[0], this.plantsArray);
     }
-    if (this.grounds[1].x <= -480) {
+    if (this.grounds[1].x <= -667) {
       this.grounds[1].setPosition(this.grounds[1].x + 4800, this.grounds[0].y);
       instiatePrefab(this.grounds[1], this.plantsArray);
     }
@@ -88,11 +84,11 @@ export default class StageController extends cc.Component {
 
   /** 云位置更新 */
   cloudsPositionUpdate() {
-    if (this.clouds[0].x <= -600) {
-      this.clouds[0].setPosition(this.clouds[0].x + 1150, this.clouds[0].y);
+    if (this.clouds[0].x <= -787) {
+      this.clouds[0].setPosition(this.clouds[0].x + 1487, this.clouds[0].y);
     }
-    if (this.clouds[1].x <= -680) {
-      this.clouds[1].setPosition(this.clouds[1].x + 1200, this.clouds[1].y);
+    if (this.clouds[1].x <= -787) {
+      this.clouds[1].setPosition(this.clouds[1].x + 1537, this.clouds[1].y);
     }
   }
 
@@ -108,7 +104,9 @@ export default class StageController extends cc.Component {
   stageReinit() {
     this.roadSpeed = 5;
     this.groundsRemoveChildren();
-    if (this.grounds[1].x <= 0) {
+    this.grounds[0].x = 1733;
+    this.grounds[1].x = 4133;
+    if (this.grounds[0].x >= 1733) {
       instiatePrefab(this.grounds[1], this.plantsArray);
     } else {
       instiatePrefab(this.grounds[0], this.plantsArray);
@@ -123,6 +121,6 @@ export default class StageController extends cc.Component {
 
   /**  */
   update() {
-    if (Global.gameState === GameState.playing) this.stageMove();
+    if (GameController.gameState === GameState.playing) this.stageMove();
   }
 }

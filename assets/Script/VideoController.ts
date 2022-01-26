@@ -1,14 +1,10 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-import Global, { GameState } from "./Global";
+import GameController, { GameState } from "./GameController";
 import DinoActionControllerClass from "./DinoActionController";
 import ButtonControllerClass from "./ButtonController";
-import StageController from "./StageController";
+import CollisionController from "./Collision";
 import ScoreControllerClass from "./ScoreController";
+import KeyboardController from "./KeyboardController";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -18,6 +14,8 @@ export default class NewClass extends cc.Component {
   videoController: cc.VideoPlayer = null;
   @property(cc.Node)
   clockNode: cc.Node = null;
+  @property(cc.Node)
+  coverNode: cc.Node = null;
 
   onLoad() {
     this.videoController.node.active = false;
@@ -28,54 +26,58 @@ export default class NewClass extends cc.Component {
     this.clockNode
       .getComponent(cc.Animation)
       .on("finished", this.clockFinished, this);
+    this.coverNode.active = false;
   }
 
   videoPlay() {
     this.videoController.node.active = true;
+    this.node.getComponent(ButtonControllerClass).cancelBtnShow();
     this.videoController.play();
+    this.coverNode.active = true;
   }
 
   videoPlaying() {
-    Global.canPressSpace = false;
-  }
-
-  videoStopped() {
-    Global.canPressSpace = true;
-    this.videoController.node.active = false;
+    this.node.getComponent(ButtonControllerClass).cancelBtnShow();
+    KeyboardController.canPressSpace = false;
+    this.coverNode.active = true;
   }
 
   videoReady() {
-    this.videoController.play();
+    this.videoPlay();
   }
 
-  videoPause() {
+  videoStopped() {
+    KeyboardController.canPressSpace = true;
+    this.node.getComponent(ButtonControllerClass).cancelBtnHide();
     this.videoController.node.active = false;
-    this.videoController.pause();
+    this.coverNode.active = false;
   }
 
   videoStop() {
+    this.videoController.currentTime = 0;
     this.videoController.node.active = false;
+    this.coverNode.active = false;
     this.videoController.stop();
+    this.node.getComponent(ButtonControllerClass).cancelBtnHide();
   }
 
   videoCompleted() {
-    this.videoController.node.active = false;
-    this.node.getComponent(StageController).stageReinit();
-    this.node.getComponent(ButtonControllerClass).resetBtnHide();
     this.clockNode.active = true;
     this.clockNode.getComponent(cc.Animation).play();
+    this.videoController.node.active = false;
+    this.node.getComponent(CollisionController).destoryHittedNode();
+    this.node.getComponent(ButtonControllerClass).resetBtnHide();
+    this.node.getComponent(ButtonControllerClass).cancelBtnHide();
     this.node.getComponent(DinoActionControllerClass).dinoInit();
+    this.coverNode.active = false;
   }
 
   clockFinished() {
-    Global.canPressSpace = true;
+    KeyboardController.canPressSpace = true;
+    this.node.getComponent(DinoActionControllerClass).dinoBlink();
     this.clockNode.active = false;
-    Global.gameState = GameState.playing;
+    GameController.gamePlaying();
     this.node.getComponent(ScoreControllerClass).curretnAnimateResume();
     this.node.getComponent(DinoActionControllerClass).dinoReborn();
   }
-
-  start() {}
-
-  // update (dt) {}
 }

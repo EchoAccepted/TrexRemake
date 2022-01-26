@@ -1,5 +1,5 @@
 /** 实例化植物预制件 */
-import Global, { GameState } from "./Global";
+import GameController, { GameState } from "./GameController";
 
 export default function instiatePrefab(
   ground: cc.Node,
@@ -20,7 +20,7 @@ export default function instiatePrefab(
      * 若不是则生成一个0-6的整数
      */
     const tempRandom = Math.floor(
-      Global.gameState === GameState.initial
+      GameController.gameState === GameState.initial
         ? Math.random() * 6
         : Math.random() * 4
     );

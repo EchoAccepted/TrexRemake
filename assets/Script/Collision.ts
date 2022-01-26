@@ -3,7 +3,8 @@
  */
 
 const { ccclass, property } = cc._decorator;
-import Global, { GameState } from "./Global";
+import GameController, { GameState } from "./GameController";
+import KeyboardController from "./KeyboardController";
 import DinoActionControllerClass from "./DinoActionController";
 import ButtonControllerClass from "./ButtonController";
 import ScoreControllerClass from "./ScoreController";
@@ -14,6 +15,7 @@ export default class CollisionController extends cc.Component {
   @property(cc.AudioClip)
   hitAudio: cc.AudioClip = null;
 
+  hittedNode: cc.Node = null;
   onLoad() {
     cc.director.getCollisionManager().enabled = true;
   }
@@ -27,17 +29,24 @@ export default class CollisionController extends cc.Component {
    * 重置按钮显示
    */
 
-  onCollisionEnter() {
+  onCollisionEnter(other: cc.Node) {
     cc.audioEngine.play(this.hitAudio, false, 0.5);
     this.node.getComponent(DinoActionControllerClass).dinoHealthReduce();
-    if (Global.dinoHealth <= 0) {
+    if (DinoActionControllerClass.dinoHealth <= 0) {
+      this.hittedNode = other;
       this.node.getComponent(DinoActionControllerClass).dinoDie();
-      Global.gameState = GameState.stopped;
+      GameController.gameState = GameState.stopped;
       this.node.getComponent(ScoreControllerClass).curretnAnimationStop();
       this.node.getComponent(ScoreControllerClass).historyAnimationUpdate();
       this.node.getComponent(ButtonControllerClass).resetBtnShow();
-      Global.canPressSpace = true;
+      KeyboardController.ableThrottle();
     }
+  }
+
+  destoryHittedNode() {
+    this.hittedNode.active = false;
+    this.hittedNode.opacity = 0;
+    //this.hittedNode.destroy();
   }
 
   onCollisionExit() {

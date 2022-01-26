@@ -1,7 +1,6 @@
 /**
  * 分数节点控制类
  */
-import Global from "./Global";
 const { ccclass, property } = cc._decorator;
 @ccclass
 export default class ScoreControllerClass extends cc.Component {
@@ -10,6 +9,8 @@ export default class ScoreControllerClass extends cc.Component {
 
   @property(cc.Node)
   historyNode: cc.Node = null;
+
+  historyRecord: number = 0;
 
   onLoad() {
     this.historyNode.active = false;
@@ -39,8 +40,8 @@ export default class ScoreControllerClass extends cc.Component {
     let currentTime = this.currentNode
       .getComponent(cc.Animation)
       .getAnimationState("Main").time;
-    if (currentTime > Global.historyRecord) {
-      Global.historyRecord = currentTime;
+    if (currentTime > this.historyRecord) {
+      this.historyRecord = currentTime;
       this.historyNode.active = true;
       let historyAnimate = this.historyNode.children[1].getComponent(
         cc.Animation

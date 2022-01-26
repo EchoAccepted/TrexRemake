@@ -1,5 +1,5 @@
 /** 定义一个恐龙动作类，方便对恐龙动作进行统一管理 */
-import Global from "./Global";
+import KeyboardController from "./KeyboardController";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -11,6 +11,9 @@ export default class DinoActionControllerClass extends cc.Component {
   /** 生命值节点 */
   @property(cc.Node)
   healthNode: cc.Node = null;
+
+  /** 恐龙生命值 */
+  public static dinoHealth: number = 3;
 
   /** 跳跃高度 */
   jumpHeight: number = 150;
@@ -41,10 +44,17 @@ export default class DinoActionControllerClass extends cc.Component {
   /** 恐龙生命值减少 */
   dinoHealthReduce() {
     if (this.healthNode.children[0].active) {
-      Global.dinoHealth -= 1;
-      this.healthNode.children[Global.dinoHealth].active = false;
+      DinoActionControllerClass.dinoHealth -= 1;
+      this.healthNode.children[DinoActionControllerClass.dinoHealth].active =
+        false;
       this.animateComponent.play("Dead");
     }
+  }
+
+  /** 恐龙闪烁 */
+  dinoBlink() {
+    let action = cc.blink(1, 5);
+    this.node.runAction(action);
   }
 
   /** 恐龙死亡 */
@@ -72,7 +82,7 @@ export default class DinoActionControllerClass extends cc.Component {
       )
       .call(() => {
         this.animateComponent.play("Move");
-        Global.canPressSpace = true;
+        KeyboardController.ableThrottle();
       })
       .start();
     cc.audioEngine.play(this.jumpAudio, false, 0.5);
@@ -80,7 +90,7 @@ export default class DinoActionControllerClass extends cc.Component {
 
   /** 恐龙重生 */
   dinoReborn() {
-    Global.dinoHealth = 3;
+    DinoActionControllerClass.dinoHealth = 3;
     this.healthNode.children.forEach((item) => {
       item.active = true;
     });

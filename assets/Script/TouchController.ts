@@ -1,44 +1,47 @@
 /** 触摸事件控制 */
-import Global, { GameState } from "./Global";
+import GameController, { GameState } from "./GameController";
 import DinoActionControllerClass from "./DinoActionController";
 import ScoreControllerClass from "./ScoreController";
 import StageController from "./StageController";
 import ButtonController from "./ButtonController";
+import KeyboardController from "./KeyboardController";
 
 const { ccclass } = cc._decorator;
 
 @ccclass
 export default class TouchController extends cc.Component {
+  dinoNode: cc.Node = null;
+
   onLoad() {
+    this.dinoNode = cc.find("Canvas/TRex");
     cc.macro.ENABLE_MULTI_TOUCH = false;
     this.node.on(cc.Node.EventType.TOUCH_START, this.touchThrottle, this);
   }
 
   touchThrottle() {
-    if (!Global.canPressSpace) {
+    if (!KeyboardController.canPressSpace) {
       return;
     }
-    console.log('pressed');
-    Global.canPressSpace = false;
+    KeyboardController.canPressSpace = false;
     this.touchHandle();
   }
 
   touchHandle() {
     /** 游戏未开始 */
-    if (Global.gameState === GameState.initial) {
-      this.node.getComponent(ScoreControllerClass).currentAnimationStart();
-      this.node.getComponent(DinoActionControllerClass).dinoJump();
-      Global.gameState = GameState.playing;
+    if (GameController.gameState === GameState.initial) {
+      this.dinoNode.getComponent(ScoreControllerClass).currentAnimationStart();
+      this.dinoNode.getComponent(DinoActionControllerClass).dinoJump();
+      GameController.gamePlaying();
     } else if (
       /** 游戏正在运行 */
-      Global.gameState === GameState.playing
+      GameController.gameState === GameState.playing
     ) {
-      this.node.getComponent(DinoActionControllerClass).dinoJump();
+      this.dinoNode.getComponent(DinoActionControllerClass).dinoJump();
     } else if (
       /** 游戏结束 */
-      Global.gameState === GameState.stopped
+      GameController.gameState === GameState.stopped
     ) {
-      this.restart();
+      //this.restart();
     }
   }
 
@@ -51,11 +54,11 @@ export default class TouchController extends cc.Component {
    * 键盘事件可使用
    */
   restart() {
-    this.node.getComponent(DinoActionControllerClass).dinoReborn();
-    Global.gameState = GameState.playing;
-    this.node.getComponent(ScoreControllerClass).currentAnimationStart();
-    this.node.getComponent(StageController).stageReinit();
-    this.node.getComponent(ButtonController).resetBtnHide();
-    Global.canPressSpace = true;
+    this.dinoNode.getComponent(DinoActionControllerClass).dinoReborn();
+    GameController.gameState = GameState.playing;
+    this.dinoNode.getComponent(ScoreControllerClass).currentAnimationStart();
+    this.dinoNode.getComponent(StageController).stageReinit();
+    this.dinoNode.getComponent(ButtonController).resetBtnHide();
+    KeyboardController.ableThrottle();
   }
 }
